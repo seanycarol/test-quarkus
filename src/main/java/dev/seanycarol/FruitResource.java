@@ -2,7 +2,7 @@ package dev.seanycarol;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -12,20 +12,17 @@ import javax.ws.rs.core.MediaType;
 @Path("/frutas")
 public class FruitResource {
 
+    @Inject
+    FruitService fruitService;
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Fruit> list() {
-        return Fruit.listAll();
+        return fruitService.list();
     }
 
     @POST
-    @Transactional
-    public Fruit create() {
-        Fruit fruit = new Fruit();
-        fruit.name = "Maçã";
-        fruit.quantity = 5;
-
-        fruit.persist();
-        return fruit;
+    public void create(FruitDTO fruitDTO) {
+        fruitService.create(fruitDTO);
     }
 }
